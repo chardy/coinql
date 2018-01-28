@@ -1,6 +1,7 @@
 import express from 'express';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 import * as Schema from './schema';
 
@@ -28,6 +29,8 @@ const contextFunction =
       secrets
     );
   };
+
+server.use(cors('*'));
 
 server.use('/graphql', bodyParser.json(), graphqlExpress(async (request) => {
   if (!schema) {
