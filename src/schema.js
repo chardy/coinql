@@ -76,6 +76,8 @@ const typeDefs = `
     active: String,
     route: String
     price: Price
+    base: Asset
+    quote: Asset
   }
 
 `;
@@ -91,6 +93,30 @@ const resolvers = {
         console.log(`https://api.cryptowat.ch/markets/${exchange}/${pair}/price`);
         console.log(results);
         return results.result;
+      } catch(e) {
+        console.log(e)
+      }
+    },
+    base: async ({ pair }) => {
+      try {
+        const results = await fetch(`https://api.cryptowat.ch/pairs/${pair}`).then( async(res) => {
+          return await res.json()
+        })
+        console.log(`https://api.cryptowat.ch/markets/${pair}/price`);
+        console.log(results.result.base);
+        return results.result.base;
+      } catch(e) {
+        console.log(e)
+      }
+    },
+    quote: async ({ pair }) => {
+      try {
+        const results = await fetch(`https://api.cryptowat.ch/pairs/${pair}`).then( async(res) => {
+          return await res.json()
+        })
+        console.log(`https://api.cryptowat.ch/markets/${pair}/price`);
+        console.log(results.result.quote);
+        return results.result.quote;
       } catch(e) {
         console.log(e)
       }

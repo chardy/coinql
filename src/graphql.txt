@@ -1,5 +1,48 @@
 query {
+  exchanges {
+    symbol
+    name
+  }
+}
+
+query {
+  assets {
+    symbol
+    name
+    fiat
+  }
+}
+
+query {
+  assets(fiat: true){
+    id
+    fiat
+    symbol
+    name
+  }
+}
+
+query {
+  assets(fiat: false){
+    id
+    fiat
+    symbol
+    name
+  }
+}
+
+query {
   getAssetExchange(market: "bitfinex", pair: "btcusd"){
     price
+  }
+}
+
+query {
+  getMarketExchange(market: "bitfinex"){
+    exchange
+    pair
+    price {
+      price
+    }
   }
 }
