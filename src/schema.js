@@ -9,7 +9,7 @@ const typeDefs = `
   type Query {
     currencies: [Currency]
     rates(currency: String!): ExchangeRates
-    stats(start: Int!, limit: Int!): Stat
+    stats(start: Int!, limit: Int!): [Stat]
   }
 
   type Stat {
@@ -56,6 +56,7 @@ const resolvers = {
         const results = await fetch('https://api.coinbase.com/v2/currencies')
         const response = await results.json()
         const data = response.data
+        console.log(data);
         return data
       } catch(e) {
         console.log(e)
@@ -71,19 +72,15 @@ const resolvers = {
     },
     stats: async (root, { start, limit }) => {
       try {
-        const results = await fetch(`https://api.coinmarketcap.com/v1/ticker?start${start}&limit=${limit}`).then( async(res) => {
-          return res.json()
+        const results = await fetch(`https://api.coinmarketcap.com/v1/ticker/?start=${start}&limit=${limit}`).then( async(res) => {
+          return await res.json()
         })
-        console.log("------");
-        console.log(camelcaseKeys(results));
-        console.log("------");
         let arr = camelcaseKeys(results);
         arr.forEach(function(obj){
           if(obj.hasOwnProperty('24hVolumeUsd')){
             delete obj['24hVolumeUsd']
           }
         });
-        console.log(arr);
         return arr;
       } catch(e) {
         console.log(e)
