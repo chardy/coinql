@@ -13,7 +13,7 @@ const typeDefs = `
     exchanges: [Exchange]
     assets: [Asset]
     getAssetExchange(market: String!, pair: String!): Price
-    getMarketExchange(market: String!): [MarketExchange]
+    getMarketExchange(market: String!, currency: String): [MarketExchange]
   }
 
   type Stat {
@@ -164,13 +164,18 @@ const resolvers = {
         console.log(e)
       }
     },
-    getMarketExchange: async (root, { market }) => {
+    getMarketExchange: async (root, { market, currency }) => {
       try {
         const results = await fetch(`https://api.cryptowat.ch/markets/${market}`).then( async(res) => {
           return await res.json()
         })
-        console.log(results);
-        return results.result;
+        let objs = results.result
+        if(currency){
+          objs = objs.filter((obj) => {
+            return obj.pair.includes(currency)
+          })
+        }
+        return objs;
       } catch(e) {
         console.log(e)
       }
