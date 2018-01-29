@@ -11,7 +11,7 @@ const typeDefs = `
     rates(currency: String!): ExchangeRates
     stats(start: Int!, limit: Int!): [Stat]
     exchanges: [Exchange]
-    assets: [Asset]
+    assets(fiat: Boolean): [Asset]
     getAssetExchange(market: String!, pair: String!): Price
     getMarketExchange(market: String!, currency: String): [MarketExchange]
   }
@@ -144,12 +144,18 @@ const resolvers = {
         console.log(e)
       }
     },
-    assets: async (root, args) => {
+    assets: async (root, { fiat }) => {
       try {
         const results = await fetch(`https://api.cryptowat.ch/assets`).then( async(res) => {
           return await res.json()
         })
-        return results.result;
+        let objs = results.result
+        if(fiat === true || fiat === false){
+          objs = objs.filter((obj) => {
+            return obj.fiat === fiat
+          })
+        }
+        return objs;
       } catch(e) {
         console.log(e)
       }
