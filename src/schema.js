@@ -10,6 +10,10 @@ const typeDefs = `
     currencies: [Currency]
     rates(currency: String!): ExchangeRates
     stats(start: Int!, limit: Int!): [Stat]
+    exchanges: [Exchange]
+    assets: [Asset]
+    getAssetExchange(market: String!, pair: String!): Price
+    getMarketExchange(market: String!): [MarketExchange]
   }
 
   type Stat {
@@ -23,6 +27,7 @@ const typeDefs = `
     availableSupply: String,
     totalSupply: String,
     maxSupply: String,
+    twentyfourhVolumeUsd: String,
     percentChange1h: String,
     percentChange24h: String,
     percentChange7d: String,
@@ -44,10 +49,53 @@ const typeDefs = `
 		currency: String
 		rate: String
 	}
+
+  type Asset {
+    id: Int,
+    symbol: String,
+    name: String,
+    fiat: Boolean,
+    route: String
+  }
+
+  type Exchange {
+    symbol: String,
+    name: String,
+    route: String,
+    active: Boolean
+  }
+
+  type Price {
+    price: Float,
+  }
+
+  type MarketExchange {
+    id: Int,
+    exchange: String,
+    pair: String,
+    active: String,
+    route: String
+    price: Price
+  }
+
 `;
 
 // Provide resolver functions for your schema fields
 const resolvers = {
+  MarketExchange: {
+    price: async ({ exchange, pair }) => {
+      try {
+        const results = await fetch(`https://api.cryptowat.ch/markets/${exchange}/${pair}/price`).then( async(res) => {
+          return await res.json()
+        })
+        console.log(`https://api.cryptowat.ch/markets/${exchange}/${pair}/price`);
+        console.log(results);
+        return results.result;
+      } catch(e) {
+        console.log(e)
+      }
+    }
+  },
   Query: {
     currencies: async () => {
       console.log('foo')
@@ -56,7 +104,6 @@ const resolvers = {
         const results = await fetch('https://api.coinbase.com/v2/currencies')
         const response = await results.json()
         const data = response.data
-        console.log(data);
         return data
       } catch(e) {
         console.log(e)
@@ -78,10 +125,52 @@ const resolvers = {
         let arr = camelcaseKeys(results);
         arr.forEach(function(obj){
           if(obj.hasOwnProperty('24hVolumeUsd')){
+            obj.twentyfourhVolumeUsd = obj['24hVolumeUsd']
             delete obj['24hVolumeUsd']
           }
         });
         return arr;
+      } catch(e) {
+        console.log(e)
+      }
+    },
+    exchanges: async (root, args) => {
+      try {
+        const results = await fetch(`https://api.cryptowat.ch/exchanges`).then( async(res) => {
+          return await res.json()
+        })
+        return results.result;
+      } catch(e) {
+        console.log(e)
+      }
+    },
+    assets: async (root, args) => {
+      try {
+        const results = await fetch(`https://api.cryptowat.ch/assets`).then( async(res) => {
+          return await res.json()
+        })
+        return results.result;
+      } catch(e) {
+        console.log(e)
+      }
+    },
+    getAssetExchange: async (root, { market, pair}) => {
+      try {
+        const results = await fetch(`https://api.cryptowat.ch/markets/${market}/${pair}/price`).then( async(res) => {
+          return await res.json()
+        })
+        return results.result;
+      } catch(e) {
+        console.log(e)
+      }
+    },
+    getMarketExchange: async (root, { market }) => {
+      try {
+        const results = await fetch(`https://api.cryptowat.ch/markets/${market}`).then( async(res) => {
+          return await res.json()
+        })
+        console.log(results);
+        return results.result;
       } catch(e) {
         console.log(e)
       }
