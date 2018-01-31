@@ -46,3 +46,31 @@ query {
     }
   }
 }
+
+query {
+  getMarketExchange(market: "kraken", currency: "usd"){
+    exchange
+    pair
+    price {
+      price
+    }
+  }
+}
+
+query {
+  getMarketExchange(market: "kraken", currency: "usd"){
+    exchange
+    pair
+    price {
+      price
+    }
+    base {
+      symbol
+      name
+    }
+    quote {
+      symbol
+      name
+    }
+  }
+}
