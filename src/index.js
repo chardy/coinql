@@ -1,6 +1,8 @@
 import express from 'express';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import bodyParser from 'body-parser';
+
+// Remember to enable CORS for API server
 import cors from 'cors';
 
 import * as Schema from './schema';

@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "node dist/index.js",
     "build": "babel src -d dist",
-    "start": "nodemon ./src/server.js --exec babel-node -e js",
+    "start": "nodemon ./src/index.js --exec babel-node -e js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

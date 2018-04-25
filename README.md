@@ -1,4 +1,4 @@
-# CoinQL Coinbase API
+# CoinQL API - Learn GraphQL Basic
 
 ### Quick start guide
 
