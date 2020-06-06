@@ -19,7 +19,7 @@
     "nodemon": "^1.11.0"
   },
   "dependencies": {
-    "apollo-server-express": "^1.2.0",
+    "apollo-server-express": "^2.14.2",
     "body-parser": "^1.17.1",
     "camelcase-keys": "^4.2.0",
     "cors": "^2.8.4",
