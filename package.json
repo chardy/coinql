@@ -23,7 +23,7 @@
     "body-parser": "^1.17.1",
     "camelcase-keys": "^4.2.0",
     "cors": "^2.8.4",
-    "express": "^4.15.2",
+    "express": "^4.17.3",
     "graphql": "^0.11.3",
     "graphql-tools": "^1.2.2",
     "lodash": "^4.17.4",
